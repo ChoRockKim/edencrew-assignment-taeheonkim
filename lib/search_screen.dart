@@ -21,6 +21,28 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
+  static const _allStocks = [
+    {'name': '삼성전자', 'symbol': '005930', 'market': '코스피'},
+    {'name': '삼성전기', 'symbol': '009150', 'market': '코스피'},
+    {'name': '삼성SDI', 'symbol': '006400', 'market': '코스피'},
+    {'name': 'SK하이닉스', 'symbol': '000660', 'market': '코스피'},
+    {'name': '카카오', 'symbol': '035720', 'market': '코스피'},
+    {'name': '에코프로비엠', 'symbol': '247540', 'market': '코스닥'},
+    {'name': 'LG에너지솔루션', 'symbol': '373220', 'market': '코스피'},
+  ];
+
+  // 필터링
+  List<Map<String, String>> get _results {
+    if (_query.isEmpty) return [];
+
+    return _allStocks.where((s) {
+      final name = s['name']!.toLowerCase();
+      final symbol = s['symbol']!;
+      final q = _query.toLowerCase();
+      return name.contains(q) || symbol.contains(q);
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,31 +50,7 @@ class _SearchScreenState extends State<SearchScreen> {
         child: Column(
           children: [
             _searchBar(context),
-            Expanded(
-              child: ListView(
-                children: const [
-                  SearchResultRow(
-                    name: '삼성전자',
-                    symbol: '005930',
-                    market: '코스피',
-                    isFavorite: true,
-                  ),
-                  SearchResultRow(
-                    name: '삼성전기',
-                    symbol: '009150',
-                    market: '코스피',
-                    isFavorite: false,
-                  ),
-                  SearchResultRow(
-                    name: '삼성SDI',
-                    symbol: '006400',
-                    market: '코스피',
-                    isFavorite: false,
-                  ),
-                ],
-              ),
-            ),
-            Expanded(child: Center(child: Text('입력 : $_query'))),
+            Expanded(child: _body(context)),
           ],
         ),
       ),
@@ -132,6 +130,29 @@ class _SearchScreenState extends State<SearchScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _body(BuildContext context) {
+    if (_query.isEmpty) {
+      return const Center(child: Text('빈 상태'));
+    }
+    if (_results.isEmpty) {
+      return const Center(child: Text('결과없음'));
+    }
+
+    return ListView.builder(
+      itemCount: _results.length,
+      itemBuilder: (context, index) {
+        final s = _results[index];
+        return SearchResultRow(
+          name: s['name']!,
+          symbol: s['symbol']!,
+          market: s['market']!,
+          isFavorite: false,
+          query: _query,
+        );
+      },
     );
   }
 }

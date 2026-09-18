@@ -10,12 +10,30 @@ class SearchResultRow extends StatelessWidget {
     required this.symbol,
     required this.market,
     required this.isFavorite,
+    required this.query,
   });
 
   final String name;
   final String symbol;
   final String market;
   final bool isFavorite;
+  final String query;
+
+  List<TextSpan> _highlightSpans(BuildContext context) {
+    if (query.isEmpty) return [TextSpan(text: name)];
+
+    final int index = name.toLowerCase().indexOf(query.toLowerCase());
+    if (index < 0) return [TextSpan(text: name)];
+
+    return [
+      TextSpan(text: name.substring(0, index)),
+      TextSpan(
+        text: name.substring(index, index + query.length),
+        style: TextStyle(color: context.colors.searchHighlight),
+      ),
+      TextSpan(text: name.substring(index + query.length)),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,13 +56,15 @@ class SearchResultRow extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    fontSize: 15,
-                    fontWeight: AppTypography.medium,
-                    color: context.colors.textPrimary,
-                    letterSpacing: -0.1,
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: AppTypography.medium,
+                      color: context.colors.textPrimary,
+                      letterSpacing: -0.1,
+                    ),
+                    children: _highlightSpans(context),
                   ),
                 ),
                 SizedBox(height: 2),
