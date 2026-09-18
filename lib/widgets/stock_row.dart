@@ -1,6 +1,7 @@
 import 'package:edencrew_assignment_starter/theme/app_theme.dart';
 import 'package:edencrew_assignment_starter/theme/app_typography.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class StockRow extends StatelessWidget {
   const StockRow({
@@ -19,6 +20,18 @@ class StockRow extends StatelessWidget {
   final int price; // 260000
   final int change; // 7500
   final double changeRate; // 2.97
+
+  /// 260000 -> 260,000
+  String get _priceText => NumberFormat('#,###').format(price);
+
+  /// 7500, 2.97 -> +7,500 (+2.97%)
+  /// 음수는 숫자 자체에 부호가 붙으므로 양수일 때만 '+'를 덧붙입니다.
+  String get _changeText {
+    final String sign = change > 0 ? '+' : '';
+    final String amount = NumberFormat('#,###').format(change);
+    final String rate = changeRate.toStringAsFixed(2);
+    return '$sign$amount ($sign$rate%)';
+  }
 
   Color _changeColor(BuildContext context) {
     if (change > 0) return context.colors.priceUpText;
@@ -73,7 +86,7 @@ class StockRow extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                '$price',
+                _priceText,
                 style: TextStyle(
                   fontSize: 15,
                   color: context.colors.textPrimary,
@@ -83,7 +96,7 @@ class StockRow extends StatelessWidget {
               ),
               SizedBox(height: 2),
               Text(
-                '$change ($changeRate%)',
+                _changeText,
                 style: TextStyle(fontSize: 11, color: _changeColor(context)),
               ),
             ],

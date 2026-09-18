@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'widgets/app_icon.dart';
 
-class WatchlistScreen extends StatelessWidget {
+class WatchlistScreen extends StatefulWidget {
   const WatchlistScreen({super.key});
 
   static const _mockStocks = [
@@ -52,6 +52,13 @@ class WatchlistScreen extends StatelessWidget {
   ];
 
   @override
+  State<WatchlistScreen> createState() => _WatchlistScreenState();
+}
+
+class _WatchlistScreenState extends State<WatchlistScreen> {
+  String _sortLabel = '가나다순';
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
@@ -74,6 +81,29 @@ class WatchlistScreen extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => _openSortSheet(),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          _sortLabel,
+                          style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: AppTypography.bold,
+                            color: context.colors.textSecondary,
+                          ),
+                        ),
+                        AppIcon(
+                          'ico_align',
+                          size: context.dimens.iconMd,
+                          color: context.colors.textSecondary,
+                        ),
+                      ],
+                    ),
+                  ),
+                  SizedBox(width: context.dimens.space4),
                   AppIcon(
                     'ico_refresh',
                     size: context.dimens.iconMd,
@@ -85,9 +115,9 @@ class WatchlistScreen extends StatelessWidget {
             // 임시 값
             Expanded(
               child: ListView.builder(
-                itemCount: _mockStocks.length,
+                itemCount: WatchlistScreen._mockStocks.length,
                 itemBuilder: (context, index) {
-                  final s = _mockStocks[index];
+                  final s = WatchlistScreen._mockStocks[index];
                   return StockRow(
                     name: s['name'] as String,
                     symbol: s['symbol'] as String,
@@ -100,6 +130,85 @@ class WatchlistScreen extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  void _openSortSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: context.colors.surfaceOverlay,
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        padding: const EdgeInsets.only(bottom: 34),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              height: 64,
+              child: Row(
+                children: [
+                  SizedBox(width: context.dimens.space6),
+                  Text(
+                    '정렬',
+                    style: TextStyle(
+                      fontSize: 19,
+                      fontWeight: AppTypography.bold,
+                      color: context.colors.textPrimary,
+                      letterSpacing: -0.2,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            _sortOption(context, '현재가순'),
+            _sortOption(context, '등락률순'),
+            _sortOption(context, '가나다순'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _sortOption(BuildContext context, String label) {
+    final bool selected = _sortLabel == label;
+
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () {
+        setState(() => _sortLabel = label);
+        Navigator.pop(context);
+      },
+      child: SizedBox(
+        height: context.dimens.rowMinHeight,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: context.dimens.space6),
+          child: Row(
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontSize: 15,
+                  fontWeight: AppTypography.medium,
+                  letterSpacing: -0.1,
+                  color: selected
+                      ? context.colors.textPrimary
+                      : context.colors.textSecondary,
+                ),
+              ),
+              const Spacer(),
+              if (selected)
+                AppIcon(
+                  'ico_check',
+                  size: 24,
+                  color: context.colors.textPrimary,
+                ),
+            ],
+          ),
         ),
       ),
     );
