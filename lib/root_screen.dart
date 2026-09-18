@@ -26,7 +26,7 @@ class _RootScreenState extends State<RootScreen> {
         child: Row(
           children: [
             Expanded(child: _tabItem(Icons.star, '관심', 0)),
-            Expanded(child: _tabItem(Icons.search, '검색', 0)),
+            Expanded(child: _tabItem(Icons.search, '검색', 1)),
           ],
         ),
       ),
@@ -39,13 +39,17 @@ class _RootScreenState extends State<RootScreen> {
         ? context.colors.navActive
         : context.colors.navInactive;
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(icon, size: context.dimens.iconMd, color: color),
-        SizedBox(height: context.dimens.space1),
-        Text(name, style: TextStyle(color: color, fontSize: 11)),
-      ],
+    return GestureDetector(
+      onTap: () => setState(() => _currentIndex = index),
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: context.dimens.iconMd, color: color),
+          SizedBox(height: context.dimens.space1),
+          Text(name, style: TextStyle(color: color, fontSize: 11)),
+        ],
+      ),
     );
   }
 }
