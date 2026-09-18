@@ -1,3 +1,4 @@
+import 'package:edencrew_assignment_starter/watchlist_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'theme/theme.dart';
@@ -14,7 +15,7 @@ class EdencrewAssignmentApp extends StatelessWidget {
     return MaterialApp(
       title: '이든크루 평가 과제',
       theme: AppTheme.dark,
-      home: const StartHereScreen(),
+      home: const WatchlistScreen(),
     );
   }
 }
