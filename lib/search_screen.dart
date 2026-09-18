@@ -1,10 +1,25 @@
+import 'package:edencrew_assignment_starter/widgets/search_result_row.dart';
 import 'package:flutter/material.dart';
 
 import 'theme/theme.dart';
 import 'widgets/app_icon.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  final TextEditingController _controller = TextEditingController();
+  String _query = '';
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +28,31 @@ class SearchScreen extends StatelessWidget {
         child: Column(
           children: [
             _searchBar(context),
-            const Expanded(child: Center(child: Text('검색 결과'))),
+            Expanded(
+              child: ListView(
+                children: const [
+                  SearchResultRow(
+                    name: '삼성전자',
+                    symbol: '005930',
+                    market: '코스피',
+                    isFavorite: true,
+                  ),
+                  SearchResultRow(
+                    name: '삼성전기',
+                    symbol: '009150',
+                    market: '코스피',
+                    isFavorite: false,
+                  ),
+                  SearchResultRow(
+                    name: '삼성SDI',
+                    symbol: '006400',
+                    market: '코스피',
+                    isFavorite: false,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(child: Center(child: Text('입력 : $_query'))),
           ],
         ),
       ),
@@ -52,6 +91,8 @@ class SearchScreen extends StatelessWidget {
             SizedBox(width: dimens.space2),
             Expanded(
               child: TextField(
+                controller: _controller,
+                onChanged: (value) => setState(() => _query = value),
                 style: TextStyle(
                   color: colors.textPrimary,
                   fontSize: 15,
@@ -76,7 +117,18 @@ class SearchScreen extends StatelessWidget {
               ),
             ),
             SizedBox(width: dimens.space2),
-            AppIcon('ico_x', size: dimens.iconSm, color: colors.textTertiary),
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: () {
+                _controller.clear();
+                setState(() => _query = "");
+              },
+              child: AppIcon(
+                'ico_x',
+                size: dimens.iconSm,
+                color: colors.textTertiary,
+              ),
+            ),
           ],
         ),
       ),

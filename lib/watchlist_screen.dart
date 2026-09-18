@@ -59,8 +59,8 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
   String _sortLabel = '가나다순';
 
   List<Map<String, Object>> get _sortedStocks {
-    // final list = [...WatchlistScreen._mockStocks]; 복사본
-    final list = [];
+    final list = [...WatchlistScreen._mockStocks]; // 복사본
+    // final list = [];
 
     switch (_sortLabel) {
       case '현재가순':
@@ -74,8 +74,8 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
           (a, b) => (a['name'] as String).compareTo(b['name'] as String),
         );
     }
-    // return list;
-    return [];
+    return list;
+    // return [];
   }
 
   @override
