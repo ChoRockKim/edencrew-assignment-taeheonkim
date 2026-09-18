@@ -2,6 +2,7 @@ import 'search_screen.dart';
 import 'watchlist_screen.dart';
 import 'package:flutter/material.dart';
 import 'theme/theme.dart';
+import 'widgets/app_icon.dart';
 
 class RootScreen extends StatefulWidget {
   const RootScreen({super.key});
@@ -25,15 +26,15 @@ class _RootScreenState extends State<RootScreen> {
         color: context.colors.surfaceRaised,
         child: Row(
           children: [
-            Expanded(child: _tabItem(Icons.star, '관심', 0)),
-            Expanded(child: _tabItem(Icons.search, '검색', 1)),
+            Expanded(child: _tabItem('ico_star_fill', '관심', 0)),
+            Expanded(child: _tabItem('ico_search', '검색', 1)),
           ],
         ),
       ),
     );
   }
 
-  Widget _tabItem(IconData icon, String name, int index) {
+  Widget _tabItem(String icon, String name, int index) {
     final bool selected = _currentIndex == index;
     final Color color = selected
         ? context.colors.navActive
@@ -45,7 +46,7 @@ class _RootScreenState extends State<RootScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: context.dimens.iconMd, color: color),
+          AppIcon(icon, size: context.dimens.iconLg, color: color),
           SizedBox(height: context.dimens.space1),
           Text(name, style: TextStyle(color: color, fontSize: 11)),
         ],

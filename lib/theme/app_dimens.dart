@@ -20,25 +20,29 @@ class AppDimens extends ThemeExtension<AppDimens> {
     required this.borderHairline,
     required this.iconSm,
     required this.iconMd,
+    required this.iconLg,
     required this.rowMinHeight,
+    required this.fieldHeight,
     required this.tabBarHeight,
   });
 
   const AppDimens.standard()
-      : space1 = 4,
-        space2 = 8,
-        space3 = 12,
-        space4 = 16,
-        space5 = 20,
-        space6 = 24,
-        radiusSm = 4,
-        radiusMd = 8,
-        radiusLg = 12,
-        borderHairline = 1,
-        iconSm = 16,
-        iconMd = 20,
-        rowMinHeight = 56,
-        tabBarHeight = 56;
+    : space1 = 4,
+      space2 = 8,
+      space3 = 12,
+      space4 = 16,
+      space5 = 20,
+      space6 = 24,
+      radiusSm = 4,
+      radiusMd = 8,
+      radiusLg = 12,
+      borderHairline = 1,
+      iconSm = 16,
+      iconMd = 20,
+      iconLg = 22,
+      rowMinHeight = 56,
+      fieldHeight = 40,
+      tabBarHeight = 56;
 
   final double space1;
   final double space2;
@@ -56,8 +60,20 @@ class AppDimens extends ThemeExtension<AppDimens> {
   final double iconSm;
   final double iconMd;
 
+  /// 탭 바 아이콘과 관심 등록 별 아이콘의 크기입니다.
+  ///
+  /// Figma `Scale` 컬렉션에는 없는 값이지만 시안 여러 곳에서 22로 반복되어
+  /// 추가했습니다. (탭 바, 검색 결과 행, 상세 헤더)
+  final double iconLg;
+
   /// 목록 행의 최소 높이입니다.
   final double rowMinHeight;
+
+  /// 검색 입력창의 높이입니다.
+  ///
+  /// Figma `Scale` 컬렉션에는 없는 값이지만, 시안의 입력창이 40으로 고정되어
+  /// 있어 `rowMinHeight` / `tabBarHeight`와 같은 성격의 토큰으로 추가했습니다.
+  final double fieldHeight;
 
   /// 하단 탭 바의 높이입니다.
   final double tabBarHeight;
@@ -76,7 +92,9 @@ class AppDimens extends ThemeExtension<AppDimens> {
     double? borderHairline,
     double? iconSm,
     double? iconMd,
+    double? iconLg,
     double? rowMinHeight,
+    double? fieldHeight,
     double? tabBarHeight,
   }) {
     return AppDimens(
@@ -92,7 +110,9 @@ class AppDimens extends ThemeExtension<AppDimens> {
       borderHairline: borderHairline ?? this.borderHairline,
       iconSm: iconSm ?? this.iconSm,
       iconMd: iconMd ?? this.iconMd,
+      iconLg: iconLg ?? this.iconLg,
       rowMinHeight: rowMinHeight ?? this.rowMinHeight,
+      fieldHeight: fieldHeight ?? this.fieldHeight,
       tabBarHeight: tabBarHeight ?? this.tabBarHeight,
     );
   }
@@ -113,7 +133,9 @@ class AppDimens extends ThemeExtension<AppDimens> {
       borderHairline: lerpDouble(borderHairline, other.borderHairline, t)!,
       iconSm: lerpDouble(iconSm, other.iconSm, t)!,
       iconMd: lerpDouble(iconMd, other.iconMd, t)!,
+      iconLg: lerpDouble(iconLg, other.iconLg, t)!,
       rowMinHeight: lerpDouble(rowMinHeight, other.rowMinHeight, t)!,
+      fieldHeight: lerpDouble(fieldHeight, other.fieldHeight, t)!,
       tabBarHeight: lerpDouble(tabBarHeight, other.tabBarHeight, t)!,
     );
   }
