@@ -58,6 +58,26 @@ class WatchlistScreen extends StatefulWidget {
 class _WatchlistScreenState extends State<WatchlistScreen> {
   String _sortLabel = '가나다순';
 
+  List<Map<String, Object>> get _sortedStocks {
+    // final list = [...WatchlistScreen._mockStocks]; 복사본
+    final list = [];
+
+    switch (_sortLabel) {
+      case '현재가순':
+        list.sort((a, b) => (b['price'] as int).compareTo(a['price'] as int));
+      case '등락률순':
+        list.sort(
+          (a, b) => (b['rate'] as double).compareTo(a['rate'] as double),
+        );
+      case '가나다순':
+        list.sort(
+          (a, b) => (a['name'] as String).compareTo(b['name'] as String),
+        );
+    }
+    // return list;
+    return [];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,20 +134,22 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
             ),
             // 임시 값
             Expanded(
-              child: ListView.builder(
-                itemCount: WatchlistScreen._mockStocks.length,
-                itemBuilder: (context, index) {
-                  final s = WatchlistScreen._mockStocks[index];
-                  return StockRow(
-                    name: s['name'] as String,
-                    symbol: s['symbol'] as String,
-                    market: s['market'] as String,
-                    price: s['price'] as int,
-                    change: s['change'] as int,
-                    changeRate: s['rate'] as double,
-                  );
-                },
-              ),
+              child: _sortedStocks.isEmpty
+                  ? _emptyState(context)
+                  : ListView.builder(
+                      itemCount: _sortedStocks.length,
+                      itemBuilder: (context, index) {
+                        final s = _sortedStocks[index];
+                        return StockRow(
+                          name: s['name'] as String,
+                          symbol: s['symbol'] as String,
+                          market: s['market'] as String,
+                          price: s['price'] as int,
+                          change: s['change'] as int,
+                          changeRate: s['rate'] as double,
+                        );
+                      },
+                    ),
             ),
           ],
         ),
@@ -210,6 +232,37 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _emptyState(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          AppIcon('ico_star', size: 40, color: context.colors.textDisabled),
+          SizedBox(height: context.dimens.space3),
+          Text(
+            '관심 종목이 없습니다',
+            style: TextStyle(
+              fontSize: 19,
+              fontWeight: AppTypography.bold,
+              color: context.colors.textSecondary,
+              letterSpacing: -0.2,
+            ),
+          ),
+          SizedBox(height: context.dimens.space3),
+          Text(
+            '검색 탭에서 종목을 찾아\n별 아이콘을 눌러 추가해주세요.',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: AppTypography.regular,
+              color: context.colors.textTertiary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
       ),
     );
   }
