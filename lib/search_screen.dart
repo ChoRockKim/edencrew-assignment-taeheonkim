@@ -1,6 +1,9 @@
+import 'package:edencrew_assignment_starter/favorites_store.dart';
 import 'package:edencrew_assignment_starter/widgets/search_result_row.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'favorites_store.dart';
 import 'theme/theme.dart';
 import 'widgets/app_icon.dart';
 
@@ -145,12 +148,15 @@ class _SearchScreenState extends State<SearchScreen> {
       itemCount: _results.length,
       itemBuilder: (context, index) {
         final s = _results[index];
+        final String id = 'domestic:${s['symbol']}';
+        final favorites = context.watch<FavoritesStore>();
         return SearchResultRow(
           name: s['name']!,
           symbol: s['symbol']!,
           market: s['market']!,
-          isFavorite: false,
+          isFavorite: favorites.isFavorite(id),
           query: _query,
+          onTapStar: () => context.read<FavoritesStore>().toggle(id),
         );
       },
     );

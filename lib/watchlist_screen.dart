@@ -1,3 +1,4 @@
+import 'package:edencrew_assignment_starter/favorites_store.dart';
 import 'package:edencrew_assignment_starter/theme/app_theme.dart';
 import 'package:edencrew_assignment_starter/theme/app_typography.dart';
 import 'package:edencrew_assignment_starter/widgets/stock_row.dart';
@@ -58,9 +59,11 @@ class WatchlistScreen extends StatefulWidget {
 class _WatchlistScreenState extends State<WatchlistScreen> {
   String _sortLabel = '가나다순';
 
-  List<Map<String, Object>> get _sortedStocks {
-    final list = [...WatchlistScreen._mockStocks]; // 복사본
-    // final list = [];
+  /// 관심 등록된 종목만 골라 현재 정렬 기준으로 정렬한 목록.
+  List<Map<String, Object>> _visibleStocks(FavoritesStore favorites) {
+    final list = WatchlistScreen._mockStocks
+        .where((s) => favorites.isFavorite('domestic:${s['symbol']}'))
+        .toList();
 
     switch (_sortLabel) {
       case '현재가순':
@@ -75,11 +78,12 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
         );
     }
     return list;
-    // return [];
   }
 
   @override
   Widget build(BuildContext context) {
+    final favorites = context.watch<FavoritesStore>();
+    final stocks = _visibleStocks(favorites);
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -134,12 +138,12 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
             ),
             // 임시 값
             Expanded(
-              child: _sortedStocks.isEmpty
+              child: stocks.isEmpty
                   ? _emptyState(context)
                   : ListView.builder(
-                      itemCount: _sortedStocks.length,
+                      itemCount: stocks.length,
                       itemBuilder: (context, index) {
-                        final s = _sortedStocks[index];
+                        final s = stocks[index];
                         return StockRow(
                           name: s['name'] as String,
                           symbol: s['symbol'] as String,

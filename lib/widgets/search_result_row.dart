@@ -11,6 +11,7 @@ class SearchResultRow extends StatelessWidget {
     required this.market,
     required this.isFavorite,
     required this.query,
+    required this.onTapStar,
   });
 
   final String name;
@@ -18,6 +19,7 @@ class SearchResultRow extends StatelessWidget {
   final String market;
   final bool isFavorite;
   final String query;
+  final VoidCallback onTapStar;
 
   List<TextSpan> _highlightSpans(BuildContext context) {
     if (query.isEmpty) return [TextSpan(text: name)];
@@ -80,12 +82,16 @@ class SearchResultRow extends StatelessWidget {
           ),
           SizedBox(width: context.dimens.space3),
 
-          AppIcon(
-            isFavorite ? 'ico_star_fill' : 'ico_star',
-            size: context.dimens.iconLg,
-            color: isFavorite
-                ? context.colors.favoriteActive
-                : context.colors.favoriteInactive,
+          GestureDetector(
+            behavior: HitTestBehavior.opaque,
+            onTap: onTapStar,
+            child: AppIcon(
+              isFavorite ? 'ico_star_fill' : 'ico_star',
+              size: context.dimens.iconLg,
+              color: isFavorite
+                  ? context.colors.favoriteActive
+                  : context.colors.favoriteInactive,
+            ),
           ),
         ],
       ),
