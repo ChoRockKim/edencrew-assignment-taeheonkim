@@ -12,6 +12,7 @@ class SearchResultRow extends StatelessWidget {
     required this.isFavorite,
     required this.query,
     required this.onTapStar,
+    required this.onTap,
   });
 
   final String name;
@@ -20,6 +21,7 @@ class SearchResultRow extends StatelessWidget {
   final bool isFavorite;
   final String query;
   final VoidCallback onTapStar;
+  final VoidCallback onTap;
 
   List<TextSpan> _highlightSpans(BuildContext context) {
     if (query.isEmpty) return [TextSpan(text: name)];
@@ -39,61 +41,65 @@ class SearchResultRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            width: context.dimens.borderHairline,
-            color: context.colors.borderSubtle,
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              width: context.dimens.borderHairline,
+              color: context.colors.borderSubtle,
+            ),
           ),
         ),
-      ),
-      padding: EdgeInsets.symmetric(
-        vertical: context.dimens.space3,
-        horizontal: context.dimens.space4,
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                RichText(
-                  text: TextSpan(
-                    style: TextStyle(
-                      fontSize: 15,
-                      fontWeight: AppTypography.medium,
-                      color: context.colors.textPrimary,
-                      letterSpacing: -0.1,
+        padding: EdgeInsets.symmetric(
+          vertical: context.dimens.space3,
+          horizontal: context.dimens.space4,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  RichText(
+                    text: TextSpan(
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: AppTypography.medium,
+                        color: context.colors.textPrimary,
+                        letterSpacing: -0.1,
+                      ),
+                      children: _highlightSpans(context),
                     ),
-                    children: _highlightSpans(context),
                   ),
-                ),
-                SizedBox(height: 2),
-                Text(
-                  '$symbol · $market',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: context.colors.textSecondary,
+                  SizedBox(height: 2),
+                  Text(
+                    '$symbol · $market',
+                    style: TextStyle(
+                      fontSize: 11,
+                      color: context.colors.textSecondary,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-          SizedBox(width: context.dimens.space3),
+            SizedBox(width: context.dimens.space3),
 
-          GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: onTapStar,
-            child: AppIcon(
-              isFavorite ? 'ico_star_fill' : 'ico_star',
-              size: context.dimens.iconLg,
-              color: isFavorite
-                  ? context.colors.favoriteActive
-                  : context.colors.favoriteInactive,
+            GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: onTapStar,
+              child: AppIcon(
+                isFavorite ? 'ico_star_fill' : 'ico_star',
+                size: context.dimens.iconLg,
+                color: isFavorite
+                    ? context.colors.favoriteActive
+                    : context.colors.favoriteInactive,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:edencrew_assignment_starter/detail_screen.dart';
 import 'package:edencrew_assignment_starter/widgets/search_result_row.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -199,6 +200,16 @@ class _SearchScreenState extends State<SearchScreen> {
             store.toggle(id);
             _showToast(isAdd: willAdd);
           },
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => DetailScreen(
+                name: s['name']!,
+                symbol: s['symbol']!,
+                market: s['market']!,
+              ),
+            ),
+          ),
         );
       },
     );
