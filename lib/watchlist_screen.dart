@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'widgets/app_icon.dart';
 import 'widgets/empty_state.dart';
 
+import 'data/naver_api.dart';
 import 'theme/theme.dart';
 
 class WatchlistScreen extends StatefulWidget {
@@ -82,6 +83,20 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
     return list;
   }
 
+  // TODO(임시): API 호출 확인용. 연동이 끝나면 지웁니다.
+  Future<void> _testApi() async {
+    debugPrint('--- API 호출 시작');
+    try {
+      final List<dynamic> items = await NaverApi().search('삼성');
+      debugPrint('결과 ${items.length}개');
+      for (final dynamic item in items.take(3)) {
+        debugPrint(item.toString());
+      }
+    } catch (e) {
+      debugPrint('실패: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final AppColors colors = context.colors;
@@ -110,6 +125,20 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                     ),
                   ),
                   const Spacer(),
+                  // TODO(임시): API 호출 확인용 버튼. 연동이 끝나면 지웁니다.
+                  GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: _testApi,
+                    child: Text(
+                      'API',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: AppTypography.bold,
+                        color: colors.accentDefault,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: dimens.space4),
                   GestureDetector(
                     behavior: HitTestBehavior.opaque,
                     onTap: () => _openSortSheet(),
