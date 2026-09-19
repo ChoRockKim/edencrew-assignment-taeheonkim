@@ -3,6 +3,7 @@ import 'package:edencrew_assignment_starter/theme/app_theme.dart';
 import 'package:edencrew_assignment_starter/theme/app_typography.dart';
 import 'package:edencrew_assignment_starter/widgets/stock_row.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'widgets/app_icon.dart';
 

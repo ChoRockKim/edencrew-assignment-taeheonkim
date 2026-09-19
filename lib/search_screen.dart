@@ -1,4 +1,4 @@
-import 'package:edencrew_assignment_starter/favorites_store.dart';
+import 'dart:async';
 import 'package:edencrew_assignment_starter/widgets/search_result_row.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,11 +17,28 @@ class SearchScreen extends StatefulWidget {
 class _SearchScreenState extends State<SearchScreen> {
   final TextEditingController _controller = TextEditingController();
   String _query = '';
+  String? _toastMessage;
+  bool _toastIsAdd = false;
+  Timer? _toastTimer;
 
   @override
   void dispose() {
+    _toastTimer?.cancel();
     _controller.dispose();
     super.dispose();
+  }
+
+  void _showToast({required bool isAdd}) {
+    _toastTimer?.cancel();
+
+    setState(() {
+      _toastIsAdd = isAdd;
+      _toastMessage = isAdd ? '관심이 등록되었습니다' : '관심이 해제되었습니다';
+    });
+
+    _toastTimer = Timer(const Duration(seconds: 2), () {
+      if (mounted) setState(() => _toastMessage = null);
+    });
   }
 
   static const _allStocks = [
@@ -50,10 +67,21 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
+        child: Stack(
           children: [
-            _searchBar(context),
-            Expanded(child: _body(context)),
+            Column(
+              children: [
+                _searchBar(context),
+                Expanded(child: _body(context)),
+              ],
+            ),
+            if (_toastMessage != null)
+              Positioned(
+                left: context.dimens.space4,
+                right: context.dimens.space4,
+                bottom: context.dimens.space4,
+                child: _toast(context),
+              ),
           ],
         ),
       ),
@@ -156,9 +184,49 @@ class _SearchScreenState extends State<SearchScreen> {
           market: s['market']!,
           isFavorite: favorites.isFavorite(id),
           query: _query,
-          onTapStar: () => context.read<FavoritesStore>().toggle(id),
+          onTapStar: () {
+            final store = context.read<FavoritesStore>();
+            final bool willAdd = !store.isFavorite(id);
+            store.toggle(id);
+            _showToast(isAdd: willAdd);
+          },
         );
       },
+    );
+  }
+
+  Widget _toast(BuildContext context) {
+    final AppColors colors = context.colors;
+    final AppDimens dimens = context.dimens;
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: dimens.space4, vertical: 14),
+      decoration: BoxDecoration(
+        color: colors.surfaceOverlay,
+        borderRadius: BorderRadius.circular(dimens.radiusLg),
+        border: Border.all(
+          color: colors.borderSubtle,
+          width: dimens.borderHairline,
+        ),
+      ),
+      child: Row(
+        children: [
+          AppIcon(
+            _toastIsAdd ? 'ico_star_fill' : 'ico_star',
+            size: 18,
+            color: colors.favoriteActive,
+          ),
+          SizedBox(width: dimens.space2),
+          Text(
+            _toastMessage!,
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: AppTypography.bold,
+              color: colors.textPrimary,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
