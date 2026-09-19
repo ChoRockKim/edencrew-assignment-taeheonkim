@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'favorites_store.dart';
 import 'theme/theme.dart';
 import 'widgets/app_icon.dart';
+import 'widgets/empty_state.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -166,10 +167,18 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _body(BuildContext context) {
     if (_query.isEmpty) {
-      return const Center(child: Text('빈 상태'));
+      return const EmptyState(
+        icon: 'ico_search',
+        title: '종목을 검색해 보세요',
+        message: '종목명 또는 종목코드 6자리로\n검색하실 수 있습니다.',
+      );
     }
     if (_results.isEmpty) {
-      return const Center(child: Text('결과없음'));
+      return EmptyState(
+        icon: 'ico_search',
+        title: '검색 결과가 없습니다',
+        message: "'$_query'와 일치하는 검색 결과를 찾지 못했습니다.",
+      );
     }
 
     return ListView.builder(

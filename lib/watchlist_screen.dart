@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/app_icon.dart';
+import 'widgets/empty_state.dart';
 
 class WatchlistScreen extends StatefulWidget {
   const WatchlistScreen({super.key});
@@ -140,7 +141,11 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
             // 임시 값
             Expanded(
               child: stocks.isEmpty
-                  ? _emptyState(context)
+                  ? const EmptyState(
+                      icon: 'ico_star',
+                      title: '관심 종목이 없습니다',
+                      message: '검색 탭에서 종목을 찾아\n별 아이콘을 눌러 추가해 주세요.',
+                    )
                   : ListView.builder(
                       itemCount: stocks.length,
                       itemBuilder: (context, index) {
@@ -237,37 +242,6 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
             ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _emptyState(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          AppIcon('ico_star', size: 40, color: context.colors.textDisabled),
-          SizedBox(height: context.dimens.space3),
-          Text(
-            '관심 종목이 없습니다',
-            style: TextStyle(
-              fontSize: 19,
-              fontWeight: AppTypography.bold,
-              color: context.colors.textSecondary,
-              letterSpacing: -0.2,
-            ),
-          ),
-          SizedBox(height: context.dimens.space3),
-          Text(
-            '검색 탭에서 종목을 찾아\n별 아이콘을 눌러 추가해주세요.',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: AppTypography.regular,
-              color: context.colors.textTertiary,
-            ),
-            textAlign: TextAlign.center,
-          ),
-        ],
       ),
     );
   }
