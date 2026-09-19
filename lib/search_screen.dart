@@ -67,6 +67,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppDimens dimens = context.dimens;
+
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -79,9 +81,9 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
             if (_toastMessage != null)
               Positioned(
-                left: context.dimens.space4,
-                right: context.dimens.space4,
-                bottom: context.dimens.space4,
+                left: dimens.space4,
+                right: dimens.space4,
+                bottom: dimens.space4,
                 child: _toast(context),
               ),
           ],

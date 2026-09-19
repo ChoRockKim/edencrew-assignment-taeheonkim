@@ -16,14 +16,17 @@ class _RootScreenState extends State<RootScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppColors colors = context.colors;
+    final AppDimens dimens = context.dimens;
+
     return Scaffold(
       body: IndexedStack(
         index: _currentIndex,
         children: [WatchlistScreen(), SearchScreen()],
       ),
       bottomNavigationBar: Container(
-        height: context.dimens.tabBarHeight,
-        color: context.colors.surfaceRaised,
+        height: dimens.tabBarHeight,
+        color: colors.surfaceRaised,
         child: Row(
           children: [
             Expanded(child: _tabItem('ico_star_fill', '관심', 0)),
@@ -35,10 +38,11 @@ class _RootScreenState extends State<RootScreen> {
   }
 
   Widget _tabItem(String icon, String name, int index) {
+    final AppColors colors = context.colors;
+    final AppDimens dimens = context.dimens;
+
     final bool selected = _currentIndex == index;
-    final Color color = selected
-        ? context.colors.navActive
-        : context.colors.navInactive;
+    final Color color = selected ? colors.navActive : colors.navInactive;
 
     return GestureDetector(
       onTap: () => setState(() => _currentIndex = index),
@@ -46,8 +50,8 @@ class _RootScreenState extends State<RootScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          AppIcon(icon, size: context.dimens.iconLg, color: color),
-          SizedBox(height: context.dimens.space1),
+          AppIcon(icon, size: dimens.iconLg, color: color),
+          SizedBox(height: dimens.space1),
           Text(name, style: TextStyle(color: color, fontSize: 11)),
         ],
       ),

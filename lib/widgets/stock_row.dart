@@ -1,7 +1,7 @@
-import 'package:edencrew_assignment_starter/theme/app_theme.dart';
-import 'package:edencrew_assignment_starter/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
+import '../theme/theme.dart';
 
 class StockRow extends StatelessWidget {
   const StockRow({
@@ -34,25 +34,30 @@ class StockRow extends StatelessWidget {
   }
 
   Color _changeColor(BuildContext context) {
-    if (change > 0) return context.colors.priceUpText;
-    if (change < 0) return context.colors.priceDownText;
-    return context.colors.priceFlatText;
+    final AppColors colors = context.colors;
+
+    if (change > 0) return colors.priceUpText;
+    if (change < 0) return colors.priceDownText;
+    return colors.priceFlatText;
   }
 
   @override
   Widget build(BuildContext context) {
+    final AppColors colors = context.colors;
+    final AppDimens dimens = context.dimens;
+
     return Container(
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            width: context.dimens.borderHairline,
-            color: context.colors.borderSubtle,
+            width: dimens.borderHairline,
+            color: colors.borderSubtle,
           ),
         ),
       ),
       padding: EdgeInsets.symmetric(
-        vertical: context.dimens.space3,
-        horizontal: context.dimens.space4,
+        vertical: dimens.space3,
+        horizontal: dimens.space4,
       ),
       child: Row(
         children: [
@@ -65,22 +70,19 @@ class StockRow extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: AppTypography.medium,
-                    color: context.colors.textPrimary,
+                    color: colors.textPrimary,
                     letterSpacing: -0.1,
                   ),
                 ),
                 SizedBox(height: 2),
                 Text(
                   '$symbol · $market',
-                  style: TextStyle(
-                    fontSize: 11,
-                    color: context.colors.textSecondary,
-                  ),
+                  style: TextStyle(fontSize: 11, color: colors.textSecondary),
                 ),
               ],
             ),
           ),
-          SizedBox(width: context.dimens.space3),
+          SizedBox(width: dimens.space3),
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
@@ -89,7 +91,7 @@ class StockRow extends StatelessWidget {
                 _priceText,
                 style: TextStyle(
                   fontSize: 15,
-                  color: context.colors.textPrimary,
+                  color: colors.textPrimary,
                   letterSpacing: -0.1,
                   fontWeight: AppTypography.medium,
                 ),

@@ -1,12 +1,12 @@
 import 'package:edencrew_assignment_starter/favorites_store.dart';
-import 'package:edencrew_assignment_starter/theme/app_theme.dart';
-import 'package:edencrew_assignment_starter/theme/app_typography.dart';
 import 'package:edencrew_assignment_starter/widgets/stock_row.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'widgets/app_icon.dart';
 import 'widgets/empty_state.dart';
+
+import 'theme/theme.dart';
 
 class WatchlistScreen extends StatefulWidget {
   const WatchlistScreen({super.key});
@@ -84,6 +84,9 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppColors colors = context.colors;
+    final AppDimens dimens = context.dimens;
+
     final favorites = context.watch<FavoritesStore>();
     final stocks = _visibleStocks(favorites);
     return Scaffold(
@@ -92,15 +95,15 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
           children: [
             Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: context.dimens.space4,
-                vertical: context.dimens.space3,
+                horizontal: dimens.space4,
+                vertical: dimens.space3,
               ),
               child: Row(
                 children: [
                   Text(
                     '관심',
                     style: TextStyle(
-                      color: context.colors.textPrimary,
+                      color: colors.textPrimary,
                       fontSize: 19,
                       fontWeight: AppTypography.bold,
                       letterSpacing: -0.2,
@@ -118,22 +121,22 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: AppTypography.bold,
-                            color: context.colors.textSecondary,
+                            color: colors.textSecondary,
                           ),
                         ),
                         AppIcon(
                           'ico_align',
-                          size: context.dimens.iconMd,
-                          color: context.colors.textSecondary,
+                          size: dimens.iconMd,
+                          color: colors.textSecondary,
                         ),
                       ],
                     ),
                   ),
-                  SizedBox(width: context.dimens.space4),
+                  SizedBox(width: dimens.space4),
                   AppIcon(
                     'ico_refresh',
-                    size: context.dimens.iconMd,
-                    color: context.colors.textSecondary,
+                    size: dimens.iconMd,
+                    color: colors.textSecondary,
                   ),
                 ],
               ),
@@ -171,43 +174,51 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        decoration: BoxDecoration(
-          color: context.colors.surfaceOverlay,
-          borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-        ),
-        padding: const EdgeInsets.only(bottom: 34),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SizedBox(
-              height: 64,
-              child: Row(
-                children: [
-                  SizedBox(width: context.dimens.space6),
-                  Text(
-                    '정렬',
-                    style: TextStyle(
-                      fontSize: 19,
-                      fontWeight: AppTypography.bold,
-                      color: context.colors.textPrimary,
-                      letterSpacing: -0.2,
+      builder: (context) {
+        final AppColors colors = context.colors;
+        final AppDimens dimens = context.dimens;
+
+        return Container(
+          decoration: BoxDecoration(
+            color: colors.surfaceOverlay,
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
+          ),
+          padding: const EdgeInsets.only(bottom: 34),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                height: 64,
+                child: Row(
+                  children: [
+                    SizedBox(width: dimens.space6),
+                    Text(
+                      '정렬',
+                      style: TextStyle(
+                        fontSize: 19,
+                        fontWeight: AppTypography.bold,
+                        color: colors.textPrimary,
+                        letterSpacing: -0.2,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            _sortOption(context, '현재가순'),
-            _sortOption(context, '등락률순'),
-            _sortOption(context, '가나다순'),
-          ],
-        ),
-      ),
+              _sortOption(context, '현재가순'),
+              _sortOption(context, '등락률순'),
+              _sortOption(context, '가나다순'),
+            ],
+          ),
+        );
+      },
     );
   }
 
   Widget _sortOption(BuildContext context, String label) {
     final bool selected = _sortLabel == label;
+
+    final AppColors colors = context.colors;
+    final AppDimens dimens = context.dimens;
 
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
@@ -216,9 +227,9 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
         Navigator.pop(context);
       },
       child: SizedBox(
-        height: context.dimens.rowMinHeight,
+        height: dimens.rowMinHeight,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: context.dimens.space6),
+          padding: EdgeInsets.symmetric(horizontal: dimens.space6),
           child: Row(
             children: [
               Text(
@@ -227,18 +238,12 @@ class _WatchlistScreenState extends State<WatchlistScreen> {
                   fontSize: 15,
                   fontWeight: AppTypography.medium,
                   letterSpacing: -0.1,
-                  color: selected
-                      ? context.colors.textPrimary
-                      : context.colors.textSecondary,
+                  color: selected ? colors.textPrimary : colors.textSecondary,
                 ),
               ),
               const Spacer(),
               if (selected)
-                AppIcon(
-                  'ico_check',
-                  size: 24,
-                  color: context.colors.textPrimary,
-                ),
+                AppIcon('ico_check', size: 24, color: colors.textPrimary),
             ],
           ),
         ),
